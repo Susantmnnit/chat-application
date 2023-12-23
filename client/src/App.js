@@ -1,6 +1,6 @@
 import './App.css';
-import Login from './Login';
-import Signup from './Signup';
+import Login from './component/Login';
+import Signup from './component/Signup';
 import Chatpage from './component/Chatpage';
 
 function App() {

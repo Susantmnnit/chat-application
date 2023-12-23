@@ -10,11 +10,13 @@
     margin-left: 2px;
     margin-right: 2px;
 }
+/* .user-icon{ 
+}*/
 .search{
     margin: 6px 20px;
     /* flex: 6vh; */
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     background-color: rgb(240, 241, 241);
     border-radius: 10px;

@@ -14,9 +14,9 @@ export default function Login() {
             {/* <input type="text" placeholder='Enter name' autoComplete='off'/> */}
             <input type="text" placeholder='Enter email' autoComplete='off'/>
             <input type="text" placeholder='Enter password' autoComplete='off'/>
-            <Button>Login</Button>
+            <Button variant='outlined'>Login</Button>
             <p>Does't have account ?</p>
-            <Button>
+            <Button variant='outlined'>
                 <Link to='/signup'>Signup</Link>
             </Button>
         </div>

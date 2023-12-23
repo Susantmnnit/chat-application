@@ -29,12 +29,12 @@ export default function Leftbar() {
   return (
     <>
       <div className='icons'>
-        <div>
+        <div className='user-icon'>
           <IconButton >
             <AccountCircleIcon/>
           </IconButton>
         </div>
-        <div>
+        <div className='user-icon'>
           <IconButton >
             <GroupAddIcon/>
           </IconButton>

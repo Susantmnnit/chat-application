@@ -14,7 +14,7 @@ export default function Signup() {
             <input type="text" placeholder='Enter name' autoComplete='off'/>
             <input type="text" placeholder='Enter email' autoComplete='off'/>
             <input type="text" placeholder='Enter password' autoComplete='off'/>
-            <Button>Signup</Button>
+            <Button variant='outlined'>Signup</Button>
         </div>
       </div>
     </div>
