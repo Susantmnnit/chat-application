@@ -1,0 +1,49 @@
+.receivedsms{
+    display: flex;
+    margin: 5px;
+}
+.receive-icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(242, 243, 244);
+    width: 32px;
+    height: 32px;
+    background-color: rgb(216, 214, 214);
+    border-radius: 50%;
+    margin: 5px;
+}
+.text-content{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    border-radius: 5px;
+    background-color: aliceblue;
+    margin: 5px;
+    padding: 5px;
+}
+.receive-name{
+    font-size: 13px;
+    font-weight: bolder;
+    color: rgb(197, 197, 197);
+}
+.receive-timestamp{
+    display: flex;
+    justify-content: flex-end;
+    font-size: 10px;
+    font-weight:lighter;
+}
+.send-messages{
+    display: flex;
+    justify-content: flex-end;
+    margin: 5px;
+}
+.messagebox{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin: 5px;
+    background-color: #bddefa;
+    border-radius: 5px;
+    padding: 5px;
+}

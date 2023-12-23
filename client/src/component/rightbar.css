@@ -1,0 +1,59 @@
+.rightbar-head{
+    width: 100%;
+    height: 10vh;
+    background-color: rgb(240, 241, 241);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.online-user-profile{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+    cursor: pointer;
+}
+.online-user-fchar{
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color:rgb(216, 214, 214);
+    color: rgb(245, 245, 246);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+}
+.delete{
+    margin: 5px;
+}
+.rightbar-message{
+    width: 100%;
+    height: 80vh;
+    background-color: rgb(221, 227, 227);
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+.rightbar-message::-webkit-scrollbar{
+    display: none;
+}
+.rightbar-send-button{
+    width: 100%;
+    height: 10vh;
+    background-color: rgb(240, 241, 241);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.search-send-bar{
+    margin-left: 15px;
+    margin-right: 15px;
+    font-size: 16px;
+    border: none;
+    width: 80%;
+    background-color: rgb(217, 219, 219);
+    border-radius: 10px;
+    padding: 10px;
+    outline: none;
+}
