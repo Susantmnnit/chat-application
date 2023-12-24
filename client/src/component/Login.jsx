@@ -1,12 +1,13 @@
 import React from 'react'
 import './login.css'
+import chatlogo from '../image/chat-app-logo.avif'
 import { Button,Link} from '@mui/material'
 
 export default function Login() {
   return (
     <div className='login-container'>
       <div className='login-leftbar'>
-        Let's chat
+        <img src={chatlogo} alt="chatlogo" />
       </div>
       <div className='login-rightbar'>
         <p className='login-head'>Login To Your Accout</p>

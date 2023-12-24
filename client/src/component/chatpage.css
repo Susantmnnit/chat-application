@@ -1,3 +1,12 @@
+.dark{
+    background-color: #2D3941 !important;
+    color: white !important;
+}
+.icon{
+    width: 1.5em !important;
+    height: 1.5em !important;
+
+}
 .container{
     display: flex;
     justify-content: center;
@@ -23,9 +32,28 @@
     flex: 1;
     margin-left: 1px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: rgb(237, 246, 246);
+}
+.home-text{
+    font-family: Tahoma, sans-serif;
+    font-size: 50px;
+    font-weight: bolder;
+    animation: color-change 4s infinite;
+}
+@keyframes color-change {
+    0% { color: rgb(185, 230, 246); }
+    50% { color: rgb(194, 188, 245); }
+    100% { color: rgb(247, 172, 206); }
+  }
+.home>img{
+    margin-top: 15px;
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 50%;
 }
 .group-input-container{
     flex: 1;

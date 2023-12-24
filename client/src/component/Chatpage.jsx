@@ -5,6 +5,8 @@ import Rightbar from './Rightbar'
 import Home from './Home'
 import Creategroup from './Creategroup'
 import Onlineuser from './Onlineuser'
+import { Outlet } from 'react-router-dom'
+import Group from './Group'
 
 export default function Chatpage() {
   return (
@@ -13,10 +15,12 @@ export default function Chatpage() {
         <Leftbar/>
       </div>
       <div className='rightbar'>
+        <Outlet/>
         {/* <Rightbar/> */}
         {/* <Home/> */}
         {/* <Creategroup/> */}
-        <Onlineuser/>
+        {/* <Onlineuser/> */}
+        {/* <Group/> */}
       </div>
     </div>
   )
