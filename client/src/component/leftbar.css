@@ -19,6 +19,8 @@
     align-items: center;
 }
 .user-icon{
+    display: flex;
+    flex-direction: row;
     padding: 2px;
 }
 .search{
@@ -42,7 +44,7 @@
 }
 .people{
     flex: 1;
-    /* background-color: rgb(240, 241, 241); */
+    background-color: rgb(240, 241, 241);
     overflow-y: scroll;
     cursor: pointer;
 }
@@ -55,8 +57,10 @@
     grid-template-rows: auto auto;
     column-gap: 10px;
     padding: 10px;
+    margin-bottom: 1px;
     /* margin: 5px; */
-    border-bottom: 1px solid aliceblue;
+    /* border-bottom: 1px solid aliceblue; */
+    background-color: #dcdfe2;
 }
 .conversation-container:hover{
     background-color: aliceblue;

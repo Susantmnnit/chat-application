@@ -71,7 +71,7 @@ export default function Leftbar() {
         </IconButton>
         <input type="text" placeholder='search' className={"search-bar" + (lighttheme ? "" : " dark")} autoComplete='off' autoFocus/>
       </div>
-      <div className={"people" + (lighttheme ? "" : " dark")}>
+      <div className={"people" + (lighttheme ? "" : " wall")}>
         {people.map((people)=>{
           return <Conversation props={people}/>
         })}

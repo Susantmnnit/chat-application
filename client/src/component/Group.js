@@ -4,6 +4,7 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import logo from '../image/online-user-logo.jpg'
 import { IconButton } from '@mui/material';
 import { useSelector } from 'react-redux';
+import { motion } from "framer-motion"
 
 export default function Group() {
     const lighttheme = useSelector((state)=>state.themekey);
@@ -22,38 +23,14 @@ export default function Group() {
             <input type="text" placeholder='search' className={"search-bar" + (lighttheme ? "" : " dark")} autoComplete='off' autoFocus/>
           </div>
           <div className="online-users">
-            <div className={"online-user" + (lighttheme ? "" : " dark")}>
+            <motion.div  initial={{ opacity: 0 }} whileInView={{opacity: 1 }} whileHover={{ opacity: 0.7 }} className={"online-user" + (lighttheme ? "" : " dark")}>
                 <p className='onlie-user-fch'>G</p>
                 <p className='online-user-name'>Group#1</p>
-            </div>
-            <div className={"online-user" + (lighttheme ? "" : " dark")}>
+            </motion.div>
+            <motion.div  initial={{ opacity: 0 }} whileInView={{opacity: 1 }} whileHover={{ opacity: 0.7 }} className={"online-user" + (lighttheme ? "" : " dark")}>
                 <p className='onlie-user-fch'>G</p>
                 <p className='online-user-name'>Group#1</p>
-            </div>
-            <div className={"online-user" + (lighttheme ? "" : " dark")}>
-                <p className='onlie-user-fch'>G</p>
-                <p className='online-user-name'>Group#1</p>
-            </div>
-            <div className={"online-user" + (lighttheme ? "" : " dark")}>
-                <p className='onlie-user-fch'>G</p>
-                <p className='online-user-name'>Group#1</p>
-            </div>
-            <div className={"online-user" + (lighttheme ? "" : " dark")}>
-                <p className='onlie-user-fch'>G</p>
-                <p className='online-user-name'>Group#1</p>
-            </div>
-            <div className={"online-user" + (lighttheme ? "" : " dark")}>
-                <p className='onlie-user-fch'>G</p>
-                <p className='online-user-name'>Group#1</p>
-            </div>
-            <div className={"online-user" + (lighttheme ? "" : " dark")}>
-                <p className='onlie-user-fch'>G</p>
-                <p className='online-user-name'>Group#1</p>
-            </div>
-            <div className={"online-user" + (lighttheme ? "" : " dark")}>
-                <p className='onlie-user-fch'>G</p>
-                <p className='online-user-name'>Group#1</p>
-            </div>
+            </motion.div>
           </div>
         </>
     )

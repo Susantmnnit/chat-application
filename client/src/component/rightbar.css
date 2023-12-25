@@ -1,3 +1,18 @@
+.dark{
+    background-color: #2D3941 !important;
+    color: white !important;
+}
+.icon{
+    width: 1.5em !important;
+    height: 1.5em !important;
+}
+.dark-butt{
+    background-color: #2D3941 !important;
+    color: rgba(162, 158, 158, 0.54) !important;
+}
+.wall{
+    background-color: #38454e !important;
+}
 .rightbar-head{
     width: 100%;
     height: 10vh;

@@ -7,14 +7,16 @@ import Creategroup from './Creategroup'
 import Onlineuser from './Onlineuser'
 import { Outlet } from 'react-router-dom'
 import Group from './Group'
+import { useSelector } from 'react-redux'
 
 export default function Chatpage() {
+  const lighttheme = useSelector((state)=>state.themekey);
   return (
     <div className='container'>
-      <div className='leftbar'>
+      <div className={"leftbar" + (lighttheme ? "" : " wall")}>
         <Leftbar/>
       </div>
-      <div className='rightbar'>
+      <div className={"rightbar" + (lighttheme ? "" : " wall")}>
         <Outlet/>
         {/* <Rightbar/> */}
         {/* <Home/> */}
