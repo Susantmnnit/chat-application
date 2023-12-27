@@ -5,6 +5,7 @@ const userRoutes = require("./routers/userRoute");
 const app=express();
 dotenv.config();
 require('./database/db');
+app.use(express.json());
 
 app.get("/",(req,res)=>{
     res.send("app is running on..");

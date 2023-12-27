@@ -13,7 +13,7 @@ export default function Login() {
         <p className='login-head'>Login To Your Accout</p>
         <div className='user-details'>
             {/* <input type="text" placeholder='Enter name' autoComplete='off'/> */}
-            <input type="text" placeholder='Enter email' autoComplete='off'/>
+            <input type="text" placeholder='Enter name' autoComplete='off'/>
             <input type="text" placeholder='Enter password' autoComplete='off'/>
             <Button variant='outlined'>Login</Button>
             <p>Does't have account ?</p>
