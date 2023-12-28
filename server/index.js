@@ -1,10 +1,12 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const userRoutes = require("./routers/userRoute");
+const cors = require("cors");
 
 const app=express();
 dotenv.config();
 require('./database/db');
+app.use(cors());
 app.use(express.json());
 
 app.get("/",(req,res)=>{
