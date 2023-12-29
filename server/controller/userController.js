@@ -62,4 +62,21 @@ const signupController = asyncHandler(async(req,res)=>{
     }
 });
 
-module.exports = {signupController,loginController};
+const fetchUsers = asyncHandler( async (req,res)=>{
+    const keyword = req.query.search
+        ? {
+            $or:[
+                {name:{$regex:req.query.search,$options: "i"}},
+                {email:{$regex:req.query.search,$options:"i"}}
+            ],
+        }
+        : {};
+
+    const users = await userModel.findOne(keyword).find({
+        _id: {$ne: req.user.id},
+    });
+
+    res.send(users);
+})
+
+module.exports = {signupController,loginController,fetchUsers};
