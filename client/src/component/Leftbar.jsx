@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './leftbar.css'
+import './chatpage.css'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
@@ -8,34 +9,42 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import { IconButton } from '@mui/material';
-import Conversation from './Conversation';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleTheme } from '../feature/themeslice';
+import { motion } from 'framer-motion';
+import axios from 'axios';
+
 
 export default function Leftbar() {
-  const [people,setpeople]=useState([
-    {
-      name: 'People-1',
-      lastmessage:'lst-1',
-      timestamp:'today'
-    },
-    {
-      name: 'People-2',
-      lastmessage:'lst-2',
-      timestamp:'today'
-    },
-    {
-      name: 'People-3',
-      lastmessage:'lst-3',
-      timestamp:'today'
-    }
-  ]);
-
+  
   const navigate=useNavigate();
   const dispatch = useDispatch();
   const lighttheme = useSelector((state)=>state.themekey);
-  // console.log(lighttheme);
+
+  // const {refresh, setRefresh} = useState(myContext);
+  const [refresh,setRefresh] = useState(true);
+  const [conversation,setConversation] = useState([]);
+  const userData = JSON.parse(localStorage.getItem("userdata"));
+  console.log(userData);
+  if(!userData){
+    // alert("user not authenticated");
+    console.log(userData);
+    navigate("/");
+  }
+
+  const user=userData.data;
+  useEffect(()=>{
+    const header = {
+      headers:{
+        Authorization:`Bearer ${user.token}`
+      }
+    };
+
+    axios.get("http://localhost:8000/chat/", header).then((res)=>{
+      setConversation(res.data);
+    });
+  });
 
   return (
     <>
@@ -72,8 +81,40 @@ export default function Leftbar() {
         <input type="text" placeholder='search' className={"search-bar" + (lighttheme ? "" : " dark")} autoComplete='off' autoFocus/>
       </div>
       <div className={"people" + (lighttheme ? "" : " wall")}>
-        {people.map((people)=>{
-          return <Conversation props={people}/>
+        {conversation.map((conversation, index)=>{
+          var chatName="";
+          if(conversation.isGroupChat){
+            chatName = conversation.chatName;
+          }
+          else{
+            conversation.users.map((user)=>{
+              if( user._id !== userData.data._id ){
+                chatName=user.name;
+              }
+            });
+          }
+          if(conversation.lastMessage === undefined ){
+            return(
+              <motion.div  initial={{ opacity: 0 }} whileInView={{opacity: 1 }} whileHover={{ opacity: 0.7 }} className={"conversation-container" + (lighttheme ? "" : " dark")}
+                key={index} onClick={()=>{navigate("chat/" + conversation._id + "&" + chatName)}}>
+                <p className='people-icon'>{chatName[0]}</p>
+                <p className={"people-name" + (lighttheme ? "" : " dark")}>{chatName}</p>
+                <p className='people-lastmessage'>no message</p>
+                <p className={"people-timestamp" + (lighttheme ? "" : " dark")}>{}</p>
+              </motion.div>
+            )
+          }
+          else{
+            return(
+              <motion.div  initial={{ opacity: 0 }} whileInView={{opacity: 1 }} whileHover={{ opacity: 0.7 }} className={"conversation-container" + (lighttheme ? "" : " dark")}
+                key={index} onClick={()=>{navigate("messages/" + conversation._id + "&" + chatName)}}>
+                <p className='people-icon'>{chatName[0]}</p>
+                <p className={"people-name" + (lighttheme ? "" : " dark")}>{chatName}</p>
+                <p className='people-lastmessage'>{conversation.lastMessage.content}</p>
+                <p className={"people-timestamp" + (lighttheme ? "" : " dark")}>{conversation.lastMessage.timestamp}</p>
+              </motion.div>
+            )
+          }
         })}
       </div>
     </>

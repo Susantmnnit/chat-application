@@ -4,7 +4,7 @@ const chatModel=mongoose.Schema({
     chatName:{
         type:String
     },
-    insGroupChat:{
+    isGroupChat:{
         type:Boolean
     },
     users:[
