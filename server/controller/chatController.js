@@ -28,7 +28,7 @@ const accessChats = asyncHandler(async(req,res)=>{
     }
     else{
         var chatData = {
-            chatName:"sender",
+            chatName:req.user.name,
             isGroupChat:false,
             users: [req.user._id, userId],
         };
@@ -75,34 +75,63 @@ const fetchGroups = asyncHandler(async (req, res) => {
     }
 });
 
-const createGroupChat = asyncHandler(async(req,res)=>{
-    if(!req.body.users || !req.body.name){
-        return res.status(400).send({message: "Data is insufficient"});
-    }
+// const createGroupChat = asyncHandler(async(req,res)=>{
+//     if(!req.body.users || !req.body.name){
+//         return res.status(400).send({message: "Data is insufficient"});
+//     }
 
-    console.log(req.body);
-    var users = JSON.parse(req.body.users);
-    console.log("chatContrller/createGroups: ", res);
+//     console.log(req.body);
+//     var users = JSON.parse(req.body.users);
+//     console.log("chatContrller/createGroups: ", res);
+//     users.push(req.user);
+
+//     try{
+//         const groupChat = await ChatModel.create({
+//             chatName:req.body.name,
+//             users:users,
+//             isGroupChat:true,
+//             groupAdmin:req.user
+//         });
+
+//         const groupChats = await ChatModel.findOne({ _id: groupChat._id})
+//         .populate("users","-password")
+//         .populate("groupAdmin","-password");
+
+//         res.status(200).json(groupChats);
+//     }catch(err){
+//         res.status(400);
+//         throw new Error("somthing went wrong in creating group");
+//     }
+// });
+const createGroupChat = asyncHandler(async (req, res) => {
+  if (!req.body.users || !req.body.name) {
+    return res.status(400).send({ message: "Data is insufficient" });
+  }
+
+  try {
+    
+    const users = Array.isArray(req.body.users) ? req.body.users : JSON.parse(req.body.users);
+
     users.push(req.user);
 
-    try{
-        const groupChat = await ChatModel.create({
-            chatName:req.body.name,
-            users:users,
-            isGroupChat:true,
-            groupAdmin:req.user
-        });
+    const groupChat = await ChatModel.create({
+      chatName: req.body.name,
+      users: users,
+      isGroupChat: true,
+      groupAdmin: req.user
+    });
 
-        const groupChats = await ChatModel.findOne({ _id: groupChat._id})
-        .populate("users","-password")
-        .populate("groupAdmin","-password");
+    const groupChats = await ChatModel.findOne({ _id: groupChat._id })
+      .populate("users", "-password")
+      .populate("groupAdmin", "-password");
 
-        res.status(200).json(groupChats);
-    }catch(err){
-        res.status(400);
-        throw new Error("somthing went wrong in creating group");
-    }
+    res.status(200).json(groupChats);
+  } catch (err) {
+    console.error("Error creating group:", err);
+    res.status(400).json({ error: "Something went wrong in creating group" });
+  }
 });
+
 
 const groupExit = asyncHandler(async (req, res) => {
     const { chatId, userId } = req.body;

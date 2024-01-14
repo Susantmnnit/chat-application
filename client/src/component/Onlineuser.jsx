@@ -60,7 +60,7 @@ export default function Onlineuser() {
                     Authorization: `Bearer ${userdata.data.token}`
                   },
                 }
-                axios.post("http://localhost:8000/user/chat",
+                axios.post("http://localhost:8000/chat",
                 {
                   userId: user._id,
                 },

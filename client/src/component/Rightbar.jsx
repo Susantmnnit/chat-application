@@ -11,7 +11,8 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
-export default function Rightbar() {
+export default function Rightbar(props) {
+  console.log("props",props);
   const lighttheme = useSelector((state)=>state.themekey);
   const [messages,setMessages] = useState("");
   const dyParams = useParams();
@@ -20,12 +21,11 @@ export default function Rightbar() {
   const [allmessages,setAllMessages] = useState([]);
   const [allmessagesCopy,setAllMessagesCopy] = useState([]);
   const [loaded,setLoaded] = useState(false);
-
   const sendMessage =()=>{
     var data = null;
     const header = {
       headers:{
-        Authorization:`Bearer ${userData.Data.token}`,
+        Authorization:`Bearer ${userData.data.token}`,
       },
     };
 
@@ -38,28 +38,33 @@ export default function Rightbar() {
     })
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     const config = {
-      headers:{
-        Authorization:`Bearer ${userData.data.token}`
+      headers: {
+        Authorization: `Bearer ${userData.data.token}`
       },
     };
-
-    axios.get("http://localhost:8000/message/"+chat_id,config)
-    .then(({data})=>{
-      setAllMessages(data);
-      setLoaded(true);
-      //WebSocket.emit("join chat",chat_id);
-    });
+  
+    axios.get("http://localhost:8000/message/" + chat_id, config)
+      .then(({ data }) => {
+        setAllMessages(data);
+        setLoaded(true);
+        console.log("heelo", allmessages); // Move the console.log here
+        //WebSocket.emit("join chat", chat_id);
+      })
+      .catch((error) => {
+        console.error("Error fetching messages", error);
+      });
     setAllMessagesCopy(allmessages);
-  },[chat_id,userData.data.token,allmessages])
+  }, [chat_id, userData.data.token, allmessages]);
+  
 
   return (
     <>
       <div className={"rightbar-head" + (lighttheme ? "" : " dark")}>
         <div className='online-user-profile'>
-          <div className='online-user-fchar'>U</div>
-          <span className='online-user-name'>user#1</span>
+          <div className='online-user-fchar'>{userData.data.name[0]}</div>
+          <span className='online-user-name'>{userData.data.name}</span>
         </div>
         <div className='delete'>
           <IconButton>
@@ -68,11 +73,11 @@ export default function Rightbar() {
         </div>
       </div>
       <div className={"rightbar-message" + (lighttheme ? "" : " wall")}>
-        {allmessages.slice(0).reverse().map((message,index) =>{
+        {Array.isArray(allmessages) && allmessages.map((message,index) =>{
           const sender = message.sender;
           const self_id = userData.data._id;
 
-          console.log(message);
+          console.log("sms",message);
           
           if(sender._id === self_id){
             return <Sendmessage props={message} key={index} />
