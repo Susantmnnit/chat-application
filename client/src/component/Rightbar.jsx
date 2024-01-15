@@ -8,11 +8,14 @@ import { IconButton } from '@mui/material';
 import Receivemessage from './Receivemessage';
 import Sendmessage from './Sendmessage';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 
-export default function Rightbar(props) {
-  console.log("props",props);
+export default function Rightbar() {
+  // console.log("props",props);
+  const location = useLocation();
+  const { sname } = location.state;
+  console.log("props",sname);
   const lighttheme = useSelector((state)=>state.themekey);
   const [messages,setMessages] = useState("");
   const dyParams = useParams();

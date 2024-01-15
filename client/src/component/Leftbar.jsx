@@ -26,6 +26,7 @@ export default function Leftbar() {
   const [refresh,setRefresh] = useState(true);
   const [conversation,setConversation] = useState([]);
   const userData = JSON.parse(localStorage.getItem("userdata"));
+  const [sname,setSname]=useState("");
   console.log(userData);
   if(!userData){
     // alert("user not authenticated");
@@ -45,7 +46,7 @@ export default function Leftbar() {
       setConversation(res.data);
     });
   });
-
+  
   return (
     <>
       <div className={"icons" + (lighttheme ? "" : " dark")}>
@@ -96,7 +97,7 @@ export default function Leftbar() {
           if(conversation.lastMessage === undefined ){
             return(
               <motion.div  initial={{ opacity: 0 }} whileInView={{opacity: 1 }} whileHover={{ opacity: 0.7 }} className={"conversation-container" + (lighttheme ? "" : " dark")}
-                key={index} onClick={()=>{navigate("messages/" + conversation._id + "&" + chatName,{ state: { chatName } })}}>
+                key={index} onClick={()=>{setSname(chatName); navigate("messages/" + conversation._id + "&" + chatName,{ state: { sname } })}}>
                 <p className='people-icon'>{chatName[0]}</p>
                 <p className={"people-name" + (lighttheme ? "" : " dark")}>{chatName}</p>
                 <p className='people-lastmessage'>no message</p>
@@ -107,7 +108,7 @@ export default function Leftbar() {
           else{
             return(
               <motion.div  initial={{ opacity: 0 }} whileInView={{opacity: 1 }} whileHover={{ opacity: 0.7 }} className={"conversation-container" + (lighttheme ? "" : " dark")}
-                key={index} onClick={()=>{navigate("messages/" + conversation._id + "&" + chatName,{ state: { chatName } })}}>
+                key={index} onClick={()=>{setSname(chatName);navigate("messages/" + conversation._id + "&" + chatName,{ state: { sname } })}}>
                 <p className='people-icon'>{chatName[0]}</p>
                 <p className={"people-name" + (lighttheme ? "" : " dark")}>{chatName}</p>
                 <p className='people-lastmessage'>{conversation.lastMessage.content}</p>
