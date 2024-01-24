@@ -26,6 +26,7 @@ const sendMessage = asyncHandler(async (req, res) => {
       sender: req.user._id,
       content: content,
       chat: chatId,
+      timestamp:Date.now(),
     };
   
     try {

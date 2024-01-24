@@ -21,7 +21,11 @@ const chatModel=mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"User",
     },
-});
+    timestamp: {
+        type: Date,
+        default: Date.now,
+    },
+},{timestamps:true});
 
 const Chat = mongoose.model("Chat",chatModel);
 module.exports=Chat;

@@ -14,7 +14,11 @@ const userModel = mongoose.Schema({
         type:String,
         require:true
     },
-});
+    timestamp: {
+        type: Date,
+        default: Date.now,
+    },
+},{timestamps:true});
 
 userModel.methods.matchPassword = async function (enteredPassword){
     return await bcrypt.compare(enteredPassword, this.password);

@@ -112,7 +112,7 @@ export default function Leftbar() {
                 <p className='people-icon'>{chatName[0]}</p>
                 <p className={"people-name" + (lighttheme ? "" : " dark")}>{chatName}</p>
                 <p className='people-lastmessage'>{conversation.lastMessage.content}</p>
-                <p className={"people-timestamp" + (lighttheme ? "" : " dark")}>{conversation.lastMessage.timestamp}</p>
+                <p className={"people-timestamp" + (lighttheme ? "" : " dark")}>{conversation.lastMessage.createdAt}</p>
               </motion.div>
             )
           }

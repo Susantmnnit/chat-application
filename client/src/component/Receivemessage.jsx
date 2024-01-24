@@ -10,7 +10,7 @@ export default function Receivemessage(props) {
             <p className='receive-name'>{props.props.sender.name}</p>
             {/* <p className='receive-message'>{props.message}</p> */}
             <p className='receive-message'>{props.props.content}</p>
-            <p className='receive-timestamp'>{props.props.sender.timestamp}</p>
+            <p className='receive-timestamp'>{props.props.createdAt}</p>
         </div>
       </div>
     )

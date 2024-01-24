@@ -8,7 +8,7 @@ export default function Sendmessage(props) {
         <div className="messagebox">
           {/* <p className='mess'>{props.message}</p> */}
           <p className='mess'>{props.props.content}</p>
-          <p className='receive-timestamp'>{props.props.timestamp}</p>
+          <p className='receive-timestamp'>{props.props.createdAt}</p>
         </div>
       </div>
     )
