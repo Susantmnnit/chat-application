@@ -16,7 +16,7 @@ export default function Group() {
   const navigate = useNavigate();
 
   if (!userData) {
-    console.log('User not found');
+    //console.log('User not found');
     navigate('/');
   }
 

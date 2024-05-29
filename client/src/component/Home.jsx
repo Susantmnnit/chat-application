@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 export default function Home() {
   const user = JSON.parse(localStorage.getItem("userdata"));
-  console.log(user.data.name);
+  //console.log(user.data.name);
   const lighttheme = useSelector((state)=>state.themekey);
   return (
     <div className={"home" + (lighttheme ? "" : " wall")}>

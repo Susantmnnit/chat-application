@@ -27,10 +27,10 @@ export default function Leftbar() {
   const [conversation,setConversation] = useState([]);
   const userData = JSON.parse(localStorage.getItem("userdata"));
   const [sname,setSname]=useState("");
-  console.log(userData);
+  //console.log(userData);
   if(!userData){
     // alert("user not authenticated");
-    console.log(userData);
+    //console.log(userData);
     navigate("/");
   }
 
@@ -47,6 +47,16 @@ export default function Leftbar() {
     });
   });
   
+  const formatDate = (isoString) => {
+    //console.log("send date string:", isoString);
+    const date = new Date(isoString);
+    //console.log("Parsed date object:", date);
+    if (isNaN(date.getTime())) {
+      return 'Invalid Date';
+    }
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+  };
+
   return (
     <>
       <div className={"icons" + (lighttheme ? "" : " dark")}>
@@ -112,7 +122,7 @@ export default function Leftbar() {
                 <p className='people-icon'>{chatName[0]}</p>
                 <p className={"people-name" + (lighttheme ? "" : " dark")}>{chatName}</p>
                 <p className='people-lastmessage'>{conversation.lastMessage.content}</p>
-                <p className={"people-timestamp" + (lighttheme ? "" : " dark")}>{conversation.lastMessage.createdAt}</p>
+                <p className={"people-timestamp" + (lighttheme ? "" : " dark")}>{formatDate(conversation.lastMessage.createdAt)}</p>
               </motion.div>
             )
           }

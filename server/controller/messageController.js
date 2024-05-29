@@ -16,6 +16,7 @@ const messages = asyncHandler(async (req, res) => {
 });
 
 const sendMessage = asyncHandler(async (req, res) => {
+  console.log(req.body);
     const { content, chatId } = req.body;
   
     if (!content) {

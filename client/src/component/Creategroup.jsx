@@ -13,7 +13,7 @@ export default function Creategroup() {
   const [usersInGroup, setUsersInGroup] = useState([]);
 
   if(!userData){
-    console.log("User not Found");
+    //console.log("User not Found");
     navigate("/");
   }
   const user = userData.data;

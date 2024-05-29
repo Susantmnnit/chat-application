@@ -12,17 +12,19 @@ import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import io from 'socket.io-client';
 
-const socket = io("http://localhost:8000");
 
-export default function Rightbar() {
+
+export default function Rightbar(props) {
   // console.log("props",props);
   const location = useLocation();
   const { sname } = location.state;
-  console.log("props",sname);
+  //console.log("props",props);
   const lighttheme = useSelector((state)=>state.themekey);
   const [messages,setMessages] = useState("");
   const dyParams = useParams();
+  
   const [chat_id,chat_user] = dyParams._id.split("&");
+  //console.log("params",chat_user);
   const userData = JSON.parse(localStorage.getItem("userdata"));
   const [allmessages,setAllMessages] = useState([]);
   const [allmessagesCopy,setAllMessagesCopy] = useState([]);
@@ -30,6 +32,11 @@ export default function Rightbar() {
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const [loaded,setLoaded] = useState(false);
   const [socketConnection,setSocketConnection] = useState(false);
+  const token=userData.data.token;
+  // const socket = io('http://localhost:8000', {
+  //   autoConnect: true,
+  // });
+  
 
   const sendMessage =()=>{
     var data = null;
@@ -39,6 +46,10 @@ export default function Rightbar() {
       },
     };
 
+    // console.log("sendMessage",messages,chat_id);
+
+    // socket.emit('sendMessage', { content: messages, chatId: chat_id});
+    setMessages("");
     axios.post("http://localhost:8000/message/",{
       content:messages,
       chatId:chat_id,
@@ -46,28 +57,18 @@ export default function Rightbar() {
       data=res;
       console.log("messages send");
     });
-    socket.emit("new message",data);
+    // socket.emit("new message",data);
   };
 
-  useEffect(()=>{
-    socket.emit("setup", userData);
-    socket.on("connection", () => {
-      setSocketConnection(!socketConnection);
-    });
 
-    return () => {
-      socketInstance.disconnect();
-    };
 
-  },[userData]);
-
-  useEffect(() => {
-    socketInstance.on("message received", (newMessage) => {
-      if (allmessagesCopy.length === 0 || allmessagesCopy._id !== newMessage._id) {
-        setAllMessages([...allmessages, newMessage]);
-      }
-    });
-  }, [allmessagesCopy, allmessages]);
+  // useEffect(() => {
+  //   socketInstance.on("message received", (newMessage) => {
+  //     if (allmessagesCopy.length === 0 || allmessagesCopy._id !== newMessage._id) {
+  //       setAllMessages([...allmessages, newMessage]);
+  //     }
+  //   });
+  // }, [allmessagesCopy, allmessages]);
 
   useEffect(() => {
     const config = {
@@ -80,8 +81,8 @@ export default function Rightbar() {
       .then(({ data }) => {
         setAllMessages(data);
         setLoaded(true);
-        console.log("heelo", allmessages); // Move the console.log here
-        socket.emit("join chat", chat_id);
+        //console.log("heelo", allmessages); // Move the console.log here
+        // socket.emit("join chat", chat_id);
 
       }).catch((error) => {
         console.error("Error fetching messages", error);
@@ -96,8 +97,8 @@ export default function Rightbar() {
     <>
       <div className={"rightbar-head" + (lighttheme ? "" : " dark")}>
         <div className='online-user-profile'>
-          <div className='online-user-fchar'>{userData.data.name[0]}</div>
-          <span className='online-user-name'>{userData.data.name}</span>
+          <div className='online-user-fchar'>{chat_user[0]}</div>
+          <span className='online-user-name'>{chat_user}</span>
         </div>
         <div className='delete'>
           <IconButton>
@@ -110,7 +111,7 @@ export default function Rightbar() {
           const sender = message.sender;
           const self_id = userData.data._id;
 
-          console.log("sms",message);
+          //console.log("sms",message);
           
           if(sender._id === self_id){
             return <Sendmessage props={message} key={index} />
@@ -124,14 +125,14 @@ export default function Rightbar() {
         <IconButton onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
           <InsertEmoticonOutlinedIcon className={"icon" + (lighttheme ? "" : " dark")} />
         </IconButton>
-        {showEmojiPicker && (
+        {/* {showEmojiPicker && (
           <Picker
             onSelect={(emoji) => {
               setChosenEmoji(emoji.native);
               setShowEmojiPicker(false);
             }}
           />
-        )}
+        )} */}
         <IconButton>
           <AddOutlinedIcon className={"icon" + (lighttheme ? "" : " dark")}/>
         </IconButton>

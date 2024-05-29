@@ -17,17 +17,17 @@ export default function Onlineuser() {
 
   useEffect(() => {
     if (!userdata) {
-      console.log("User not authenticated");
+      //console.log("User not authenticated");
       navigate(-1);
     } else {
-      console.log("User refreshed");
+      //console.log("User refreshed");
       const header = {
         headers: {
           Authorization: `Bearer ${userdata.data.token}`
         }
       };
       axios.get("http://localhost:8000/user/fetchusers", header).then((data) => {
-        console.log("User data from API ", data);
+        //console.log("User data from API ", data);
         setUsers(data.data);
       });
     }
@@ -54,16 +54,14 @@ export default function Onlineuser() {
             <motion.div initial={{ opacity: 0 }} whileInView={{opacity: 1 }} whileHover={{ opacity: 0.7 }}
               className={"online-user" + (lighttheme ? "" : " dark")} key={index} 
               onClick={()=>{
-                console.log("creating chat with ",user.name);
+                // console.log("chat with ",user.name);
                 const header = {
                   headers :{
                     Authorization: `Bearer ${userdata.data.token}`
                   },
                 }
-                axios.post("http://localhost:8000/chat",
-                {
-                  userId: user._id,
-                },
+                axios.post("http://localhost:8000/chat",{
+                  userId: user._id,},
                 header);
               }}>
                 <p className='onlie-user-fch'>{user.name[0]}</p>
