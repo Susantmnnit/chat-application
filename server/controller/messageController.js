@@ -2,6 +2,36 @@ const asyncHandler = require("express-async-handler");
 const messageModel = require("../models/messageModel");
 const ChatModel = require("../models/chatModel");
 const userModel = require("../models/useModel");
+const cloudinary = require('cloudinary').v2;
+const fs = require('fs');
+const dotenv = require("dotenv");
+dotenv.config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDNARY_NAME,
+  api_key: process.env.CLOUDNARY_API_KEY,
+  api_secret: process.env.CLOUDNARY_API_SECRET_KEY,
+  
+});
+// console.log("cloudinary-",process.env.PORT,process.env.CLOUDNARY_API_KEY,process.env.CLOUDNARY_API_SECRET_KEY);
+const uploadFile = async (req,res) => {
+    
+  const file = req.file;
+  try {
+      if (!file) return null;
+
+      const response = await cloudinary.uploader.upload(file.path, {
+          resource_type: "auto"
+      });
+      fs.unlinkSync(file.path); 
+      // console.log("hello")
+      res.send({status: 200, data: {url: response.url}});
+  } catch (error) {
+      console.log("error in upload file:" + error);
+      fs.unlinkSync(file.path);
+      res.send({status: 400, data: {message: "Error"+error}})
+  }
+}
 
 const messages = asyncHandler(async (req, res) => {
     try {
@@ -51,4 +81,4 @@ const sendMessage = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = {messages,sendMessage};
+module.exports = {uploadFile,messages,sendMessage};

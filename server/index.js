@@ -5,10 +5,6 @@ const chatRoutes = require("./routers/chatRoutes");
 const messageRoutes = require("./routers/messageRoutes");
 const cors = require("cors");
 const http = require("http");
-const { Server } = require("socket.io");
-const { sendMessage } = require("./controller/messageController");
-const { authenticate, authentication } = require("./middleware/authentication");
-const asyncHandler = require("express-async-handler");
 
 const app = express();
 dotenv.config();

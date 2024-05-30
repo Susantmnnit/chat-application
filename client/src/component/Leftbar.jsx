@@ -57,13 +57,16 @@ export default function Leftbar() {
     return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
   };
 
+  const isImageUrl = (url) => {
+    return /\.(jpg|jpeg|png|gif|bmp|webp)$/.test(url);
+  };
+
   return (
     <>
       <div className={"icons" + (lighttheme ? "" : " dark")}>
         <div className='user-icon'>
-          <IconButton>
-            <AccountCircleIcon className={"icon" + (lighttheme ? "" : " dark")}/>
-          </IconButton>
+          <p className='people-icon' style={{margin:'5px'}}>{user.name[0]}</p>
+          <p className={"people-name" + (lighttheme ? "" : " dark")} style={{fontSize:'30px',color:''}}>{user.name}</p>
         </div>
         <div className='user-icon'>
           <IconButton onClick={()=>{navigate('onlineusers')}}>
@@ -104,7 +107,7 @@ export default function Leftbar() {
               }
             });
           }
-          if(conversation.lastMessage === undefined ){
+          if(!conversation.lastMessage){
             return(
               <motion.div  initial={{ opacity: 0 }} whileInView={{opacity: 1 }} whileHover={{ opacity: 0.7 }} className={"conversation-container" + (lighttheme ? "" : " dark")}
                 key={index} onClick={()=>{setSname(chatName); navigate("messages/" + conversation._id + "&" + chatName,{ state: { sname } })}}>
@@ -121,7 +124,11 @@ export default function Leftbar() {
                 key={index} onClick={()=>{setSname(chatName);navigate("messages/" + conversation._id + "&" + chatName,{ state: { sname } })}}>
                 <p className='people-icon'>{chatName[0]}</p>
                 <p className={"people-name" + (lighttheme ? "" : " dark")}>{chatName}</p>
-                <p className='people-lastmessage'>{conversation.lastMessage.content}</p>
+                {isImageUrl(conversation.lastMessage.content) ? (
+                    <img src={conversation.lastMessage.content} alt="sent image" className='people-lastmessage' style={{width:'30px',height:'20px'}} />
+                  ) : (
+                    <p className='people-lastmessage'>{conversation.lastMessage.content}</p>
+                  )}
                 <p className={"people-timestamp" + (lighttheme ? "" : " dark")}>{formatDate(conversation.lastMessage.createdAt)}</p>
               </motion.div>
             )

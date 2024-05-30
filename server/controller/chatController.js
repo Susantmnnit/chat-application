@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const ChatModel = require("../models/chatModel");
 const userModel = require("../models/useModel");
+const Message = require("../models/messageModel");
 
 const accessChats = asyncHandler(async(req,res)=>{
     const { userId } = req.body;
@@ -168,5 +169,18 @@ const addSelfToGroup = asyncHandler(async (req, res) => {
     }
 });
   
+const clearChats = asyncHandler(async (req,res) =>{
+  const userId = req.user._id; 
+  const chatId = req.body.chatId; 
+  console.log(userId,chatId);
+  try {
+    const messages = await Message.find({ sender: userId, chat: chatId });
+    await Message.deleteMany({ _id: { $in: messages.map(msg => msg._id) } });
+    res.status(200).json({ message: 'User messages in the chat cleared successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error clearing user messages in the chat', error });
+  }
+});
 
-module.exports = { accessChats,fetchChats,fetchGroups,createGroupChat,groupExit,addSelfToGroup};
+
+module.exports = { accessChats,fetchChats,fetchGroups,createGroupChat,groupExit,addSelfToGroup,clearChats};
