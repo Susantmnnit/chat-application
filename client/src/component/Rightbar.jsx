@@ -3,6 +3,7 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import InsertEmoticonOutlinedIcon from '@mui/icons-material/InsertEmoticonOutlined';
 import RestoreFromTrashOutlinedIcon from '@mui/icons-material/RestoreFromTrashOutlined';
+import VideoCameraFrontOutlinedIcon from '@mui/icons-material/VideoCameraFrontOutlined';
 import './rightbar.css';
 import { IconButton, CircularProgress } from '@mui/material';
 import Receivemessage from './Receivemessage';
@@ -12,6 +13,11 @@ import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
+import io from "socket.io-client";
+import ScrollableFeed from 'react-scrollable-feed';
+
+const ENDPOINT = "http://localhost:8000";
+let socket, selectedChatCompare;
 
 export default function Rightbar(props) {
   const location = useLocation();
@@ -29,10 +35,21 @@ export default function Rightbar(props) {
   const fileInputRef = useRef(null);
   const [file, setFile] = useState();
   const [isSending, setIsSending] = useState(false);
-  const token = userData.data.token;
+  const [socketConnected, setSocketConnected] = useState(false);
+  const user = userData.data;
 
-  // console.log("data;;;;;",userData.data);
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup", user);
+    socket.on("connected", () => setSocketConnected(true));
 
+    // return () => {
+    //   socket.disconnect();
+    //   socket.off();
+    // }
+  }, [user]);
+
+  
   const sendMessage = async () => {
     setIsSending(true); // Start loading indicator
     let messagesContent = messages;
@@ -42,10 +59,11 @@ export default function Rightbar(props) {
       try {
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('upload_preset', 'chit-chat');
 
-        const res = await axios.post("http://localhost:8000/message/fileUpload/", formData);
-        if (res.data && res.data.data && res.data.data.url) {
-          const img_url = res.data.data.url;
+        const res = await axios.post(`https://api.cloudinary.com/v1_1/dcpgteuyq/image/upload`, formData);
+        if (res.data && res.data.secure_url) {
+          const img_url = res.data.secure_url;
           messagesContent = img_url;
         } else {
           alert('File upload failed, no URL returned');
@@ -61,19 +79,18 @@ export default function Rightbar(props) {
       }
     }
 
-    // Optimistically add the message to the UI
     const newMessage = {
       content: messagesContent,
       sender: { _id: userData.data._id },
       createdAt: new Date().toISOString(),
-      _id: Math.random().toString(36).substring(2, 15) // temporary id
+      _id: Math.random().toString(36).substring(2, 15)
     };
     setAllMessages((prevMessages) => [...prevMessages, newMessage]);
 
-    setMessages(""); 
+    setMessages("");
 
     try {
-      await axios.post("http://localhost:8000/message/", {
+      const { data } = await axios.post("http://localhost:8000/message/", {
         content: messagesContent,
         chatId: chat_id,
       }, {
@@ -81,13 +98,14 @@ export default function Rightbar(props) {
           Authorization: `Bearer ${userData.data.token}`
         },
       });
-      console.log("Message sent");
+      socket.emit("new message", data);
+      console.log("Message sent", data);
     } catch (err) {
       console.error('Error sending message:', err);
-      
+
       setAllMessages((prevMessages) => prevMessages.filter((msg) => msg._id !== newMessage._id));
     } finally {
-      setIsSending(false); 
+      setIsSending(false);
     }
   };
 
@@ -98,14 +116,16 @@ export default function Rightbar(props) {
       },
     };
 
+    setLoaded(true);
     axios.get("http://localhost:8000/message/" + chat_id, config)
       .then(({ data }) => {
         setAllMessages(data);
-        setLoaded(true);
+        socket.emit("join chat", chat_id);
       }).catch((error) => {
         console.error("Error fetching messages", error);
       });
-  }, [chat_id, userData.data.token]);
+    setLoaded(false);
+  });
 
   const [showPicker, setShowPicker] = useState(false);
 
@@ -132,7 +152,7 @@ export default function Rightbar(props) {
   }, [pickerRef, inputRef]);
 
   const clearChats = async () => {
-    console.log("chat_id",chat_id);
+    console.log("chat_id", chat_id);
     try {
       await axios.delete("http://localhost:8000/chat/clearChats/", {
         data: { chatId: chat_id },
@@ -140,12 +160,29 @@ export default function Rightbar(props) {
           Authorization: `Bearer ${userData.data.token}`
         },
       });
-      console.log("Message deleted");
+      console.log("Messages deleted");
     } catch (err) {
       console.error('Error deleting messages:', err);
     }
   }
-  
+
+  useEffect(() => {
+    selectedChatCompare = chat_id;
+  }, [chat_id]);
+
+  useEffect(() => {
+    socket.on("message received", (newMessageReceived) => {
+      if (selectedChatCompare !== newMessageReceived.chat._id) {
+        // Handle notification for other chats
+      } else {
+        setAllMessages((prevMessages) => [...prevMessages, newMessageReceived]);
+      }
+    });
+    // return () => {
+    //   socket.off("message received");
+    // };
+  }, [selectedChatCompare]);
+
 
   return (
     <>
@@ -155,12 +192,16 @@ export default function Rightbar(props) {
           <span className='online-user-name'>{chat_user}</span>
         </div>
         <div className='delete'>
-          <IconButton onClick={() => {clearChats()}}>
+          <IconButton>
+            <VideoCameraFrontOutlinedIcon className={"icon" + (lighttheme ? "" : " dark")} />
+          </IconButton>
+          <IconButton onClick={() => { clearChats() }}>
             <RestoreFromTrashOutlinedIcon className={"icon" + (lighttheme ? "" : " dark")} />
           </IconButton>
         </div>
       </div>
       <div className={"rightbar-message" + (lighttheme ? "" : " wall")}>
+        <ScrollableFeed>
         {Array.isArray(allmessages) && allmessages.map((message, index) => {
           const sender = message.sender;
           const self_id = userData.data._id;
@@ -171,6 +212,7 @@ export default function Rightbar(props) {
             return <Receivemessage props={message} key={index} />
           }
         })}
+        </ScrollableFeed>
       </div>
       <div className={"rightbar-send-button" + (lighttheme ? "" : " dark")}>
         <IconButton onClick={() => setShowPicker(val => !val)}>
@@ -184,10 +226,11 @@ export default function Rightbar(props) {
         <IconButton onClick={() => fileInputRef.current.click()}>
           <AddOutlinedIcon className={"icon" + (lighttheme ? "" : " dark")} />
         </IconButton>
-        <input accept="image/*" onChange={(e) => setFile(e.target.files[0])}
+        <input accept="image/*"
           type="file"
           ref={fileInputRef}
           style={{ display: 'none' }}
+          onChange={(e) => setFile(e.target.files[0])}
         />
         <input placeholder='type messages...'
           value={file ? file.name : messages}

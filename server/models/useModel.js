@@ -14,6 +14,11 @@ const userModel = mongoose.Schema({
         type:String,
         require:true
     },
+    isAdmin: {
+        type: Boolean,
+        required: true,
+        default: false,
+    },
     timestamp: {
         type: Date,
         default: Date.now,

@@ -7,11 +7,16 @@ import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Toaster from './Toaster';
 
 export default function Onlineuser() {
   const lighttheme = useSelector((state)=>state.themekey);
-  const [refresh,setRefresh] = useState(true);
-  const [users,setUsers] = useState([]);
+  const [refresh, setRefresh] = useState(true);
+  const [search, setSearch] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
   const userdata = JSON.parse(localStorage.getItem("userdata"));
   const navigate = useNavigate();
 
@@ -33,9 +38,52 @@ export default function Onlineuser() {
     }
   }, [refresh, navigate, userdata?.data?.token, userdata]); 
   
+  const handleSearch = async (query) => {
+    setRefresh(!refresh)
+    setSearch(query);
+    if (!query) {
+      setToastMessage("Please Enter something in search");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userdata.data.token}`,
+        },
+      };
+
+      console.log("hello---");
+      const { data } = await axios.get(`http://localhost:8000/user/fetchusers?search=${search}`, config);
+      setLoading(false);
+      setSearchResult(data);
+    } catch (error) {
+      setToastMessage("Failed to Load the Search Results");
+    }
+  };
+
+  const chatHndler = async (user) => {
+    const header = {
+      headers: {
+        Authorization: `Bearer ${userdata.data.token}`
+      },
+    }
+    try {
+      await axios.post("http://localhost:8000/chat", {
+        userId: user._id,
+      },
+        header);
+      setToastMessage("Chat initiated successfully");
+    } catch (error) {
+      setToastMessage("Failed to initiate chat");
+    }
+  }
 
   return (
     <>
+      {toastMessage && <Toaster message={toastMessage} />}
       <div className={"icons" + (lighttheme ? "" : " dark")}>
         <div className='logo'>
           <img src={logo} alt="Logo" />
@@ -43,32 +91,34 @@ export default function Onlineuser() {
         </div>
       </div>
       <div className={"search" + (lighttheme ? "" : " dark")}>
-        <IconButton onClick={()=>{setRefresh(!refresh)}}>
+        <IconButton>
           <SearchOutlinedIcon className={"icon" + (lighttheme ? "" : " dark")} />
         </IconButton>
-        <input type="text" placeholder='search' className={"search-bar" + (lighttheme ? "" : " dark")} autoComplete='off' autoFocus/>
+        <input type="text" placeholder="Search by name or email" className={"search-bar" + (lighttheme ? "" : " dark")}
+          value={search}
+          onChange={(e) => handleSearch(e.target.value)}
+        />
       </div>
       <div className="online-users">
-        { users.map((user,index)=>{
+        {searchResult.length>0 ?  (searchResult.map((user,index)=>{
           return(
             <motion.div initial={{ opacity: 0 }} whileInView={{opacity: 1 }} whileHover={{ opacity: 0.7 }}
               className={"online-user" + (lighttheme ? "" : " dark")} key={index} 
-              onClick={()=>{
-                // console.log("chat with ",user.name);
-                const header = {
-                  headers :{
-                    Authorization: `Bearer ${userdata.data.token}`
-                  },
-                }
-                axios.post("http://localhost:8000/chat",{
-                  userId: user._id,},
-                header);
-              }}>
+              onClick={() =>chatHndler(user)}>
                 <p className='onlie-user-fch'>{user.name[0]}</p>
                 <p className='online-user-name'>{user.name}</p>
             </motion.div>
           )
-        })}
+        })) : (users.map((user,index)=>{
+          return(
+            <motion.div initial={{ opacity: 0 }} whileInView={{opacity: 1 }} whileHover={{ opacity: 0.7 }}
+              className={"online-user" + (lighttheme ? "" : " dark")} key={index} 
+              onClick={() =>chatHndler(user)}>
+                <p className='onlie-user-fch'>{user.name[0]}</p>
+                <p className='online-user-name'>{user.name}</p>
+            </motion.div>
+          )
+        }))}
       </div>
     </>
   )
