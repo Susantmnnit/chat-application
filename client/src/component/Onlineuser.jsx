@@ -55,7 +55,7 @@ export default function Onlineuser() {
         },
       };
 
-      console.log("hello---");
+      // console.log("hello---");
       const { data } = await axios.get(`http://localhost:8000/user/fetchusers?search=${search}`, config);
       setLoading(false);
       setSearchResult(data);

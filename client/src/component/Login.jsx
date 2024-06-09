@@ -53,39 +53,46 @@ export default function Login() {
   };
 
   const signupHandler = async()=>{
-    console.log(data);
+    // console.log(data);
     setLoading(true);
-    try{
-      const header = {
-        headers:{
-          "Content-type": "application/json",
-        },
-      };
+    if (!name || !email || !password) {
+      setLoading(false);
+      setSignInStatus({
+        msg: "fill all details correctly", key: Math.random()
+      });
+    } else {
+      try {
+        const header = {
+          headers: {
+            "Content-type": "application/json",
+          },
+        };
 
-      const response = await axios.post(
-        "http://localhost:8000/user/signup/",
-        data,
-        header
-      );
-      console.log(response);
-      setLoading(false);
-      setSignInStatus({msg:"Success",key:Math.random()});
-      navigate("/chat-app/home");
-      localStorage.setItem("userdata", JSON.stringify(response));
-    }
-    catch(err){
-      console.log(err);
-      if(err.response.status === 405){
-        setSignInStatus({
-          msg:"user name already exists, you can login", key:Math.random()
-        });
+        const response = await axios.post(
+          "http://localhost:8000/user/signup/",
+          data,
+          header
+        );
+        console.log(response);
+        setLoading(false);
+        setSignInStatus({ msg: "Success", key: Math.random() });
+        navigate("/chat-app/home");
+        localStorage.setItem("userdata", JSON.stringify(response));
       }
-      if(err.response.status === 406){
-        setSignInStatus({
-          msg:"user email already exists, you can login", key:Math.random()
-        });
+      catch (err) {
+        console.log(err);
+        if (err.response.status === 405) {
+          setSignInStatus({
+            msg: "user name already exists, you can login", key: Math.random()
+          });
+        }
+        if (err.response.status === 406) {
+          setSignInStatus({
+            msg: "user email already exists, you can login", key: Math.random()
+          });
+        }
+        setLoading(false);
       }
-      setLoading(false);
     }
   };
 
@@ -99,15 +106,16 @@ export default function Login() {
           <img src={chatlogo} alt="chatlogo" />
         </div>
           { showlogin && (
-            <div className='login-rightbar'>
-              <p className='login-head'>Login To Your Accout</p>
+          <div className='login-rightbar'>
+            <div className='login-inner'>
+              <p className='login-head'>LOGIN</p>
               <div className='user-details'>
                   <input type="text" placeholder='Enter name' onChange={changeHandler} name='name' value={name} autoComplete='off'/>
                   <input type="text" placeholder='Enter password' onChange={changeHandler} name='password' value={password} autoComplete='off'/>
-                  <Button variant='outlined' onClick={loginHandler}>Login</Button>
+                  <Button style={{color:'#0087ff'}} variant='none' onClick={loginHandler}>Login</Button>
                   <p>Does't have account ?</p>
-                  <Button variant='outlined' onClick={()=>{ setShowlogin(false) }}>
-                      <Link to='/signup'>Signup</Link>
+                  <Button variant='none' onClick={()=>{ setShowlogin(false) }}>
+                      <Link sx={{ textDecoration: 'none' }} to='/signup'>Signup</Link>
                   </Button>
                   { logInStatus ? (
                   <Toaster key={logInStatus.key} message={logInStatus.msg}/>
@@ -115,25 +123,28 @@ export default function Login() {
                   null
                 }
               </div>
+              </div>
             </div>
           )}
           { !showlogin && (
-            <div className='login-rightbar'>
-              <p className='login-head'>Login To Your Accout</p>
+          <div className='login-rightbar'>
+            <div className='login-inner'>
+              <p className='login-head'>REGISTER</p>
               <div className='user-details'>
                   <input type="text" placeholder='Enter name' onChange={changeHandler} name='name' value={name} autoComplete='off'/>
                   <input type="text" placeholder='Enter email' onChange={changeHandler} name='email' value={email} autoComplete='off'/>
                   <input type="text" placeholder='Enter password' onChange={changeHandler} name='password' value={password} autoComplete='off'/>
-                  <Button variant='outlined' onClick={signupHandler}>Signup</Button>
+                  <Button variant='none' style={{color:'#0087ff'}} onClick={signupHandler}>Signup</Button>
                   <p>Already have account ?</p>
-                  <Button variant='outlined' onClick={()=>{ setShowlogin(true) }}>
-                      <Link to='/login'>Login</Link>
+                  <Button variant='none'  onClick={()=>{ setShowlogin(true) }}>
+                      <Link sx={{ textDecoration: 'none' }} to='/login'>Login</Link>
                   </Button>
                   { signInStatus ? (
                     <Toaster key={signInStatus.key} message={signInStatus.msg}/>
                     ) : 
                     null
                   }
+              </div>
               </div>
             </div>
           )}

@@ -7,7 +7,7 @@ const accessChats = asyncHandler(async (req, res) => {
   const { userId } = req.body;
 
   if (!userId) {
-    console.log("UserId not received");
+    // console.log("UserId not received");
     return res.sendStatus(400);
   }
 
@@ -137,7 +137,7 @@ const createGroupChat = asyncHandler(async (req, res) => {
 
     res.status(200).json(groupChats);
   } catch (err) {
-    console.error("Error creating group:", err);
+    // console.error("Error creating group:", err);
     res.status(400).json({ error: "Something went wrong in creating group" });
   }
 });
@@ -186,7 +186,7 @@ const exitGroup = asyncHandler(async (req, res) => {
 const clearChats = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const chatId = req.body.chatId;
-  console.log(userId, chatId);
+  // console.log(userId, chatId);
   try {
     const messages = await Message.find({ sender: userId, chat: chatId });
     await Message.deleteMany({ _id: { $in: messages.map((msg) => msg._id) } });
@@ -200,6 +200,23 @@ const clearChats = asyncHandler(async (req, res) => {
   }
 });
 
+const fetchChatUser = asyncHandler(async (req, res) => {
+  // console.log("something");
+  try {
+    const chat = await ChatModel.findById(req.params.chatId).populate(
+      "users",
+      "name email"
+    );
+    if (!chat) {
+      return res.status(404).json({ message: "Chat not found" });
+    }
+    // console.log(res);
+    res.json(chat.users);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 module.exports = {
   accessChats,
   fetchChats,
@@ -208,4 +225,5 @@ module.exports = {
   exitGroup,
   addSelfToGroup,
   clearChats,
+  fetchChatUser,
 };

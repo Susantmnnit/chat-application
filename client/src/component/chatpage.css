@@ -124,3 +124,14 @@
     align-items: center;
     margin: 5px;
 }
+
+@media (max-width: 744px) {
+    .leftbar {
+        display: none;
+    }
+    .rightbar{
+        display: flex !important;
+        width: 90%;
+        flex: 1.9;
+    }
+}

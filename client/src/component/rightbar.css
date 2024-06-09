@@ -72,3 +72,23 @@
     padding: 10px;
     outline: none;
 }
+.groups_chat{
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    flex-direction: column;
+}
+.group_ul{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+}
+.group_li{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+@media (max-width: 747px) {
+    
+}

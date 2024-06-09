@@ -106,3 +106,32 @@
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size: 0.75rem;
 }
+.user-icon {
+    position: relative;
+}
+
+.menu {
+    position: absolute;
+    top: 40px;
+    /* Adjust based on your layout */
+    right: 0;
+    z-index: 10;
+}
+
+.icon.dark {
+    color: #fff;
+}
+
+.icon {
+    color: #000;
+}
+
+.search-bar.dark {
+    background-color: #333;
+    color: #fff;
+}
+
+.search-bar {
+    background-color: #fff;
+    color: #000;
+}

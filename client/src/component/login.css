@@ -1,25 +1,31 @@
-.login-container{
+/* login.css */
+
+/* Base styles */
+.login-container {
     display: flex;
     justify-content: center;
     background-color: rgb(250, 249, 249);
     width: 95%;
     height: 90vh;
 }
-.login-leftbar{
+
+.login-leftbar {
     flex: 0.3;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: rgb(221, 227, 227);
 }
-.login-leftbar>img{
+
+.login-leftbar>img {
     width: 200px;
     height: 200px;
     object-fit: cover;
     border-radius: 50%;
     overflow: hidden;
 }
-.login-rightbar{
+
+.login-rightbar {
     flex: 0.7;
     display: flex;
     justify-content: center;
@@ -27,20 +33,81 @@
     flex-direction: column;
     background-color: rgb(237, 246, 246);
 }
-.login-head{
-    font-size: 20px;
+
+.login-head {
+    font-size: 27px;
+    padding: 10px;
 }
-.user-details{
+
+.user-details {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 26px;
 }
-.user-details>input{
+
+.user-details>input {
     font-size: 20px;
     margin: 10px;
-    padding: 5px;
+    padding: 11px;
     border: none;
     outline: none;
     border-radius: 5px;
+}
+
+.login-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px #575ca4;
+    border-radius: 10px;
+    padding: 5px;
+    box-shadow: 0 4px 8px rgba(45, 41, 145, 0.6);
+}
+
+/* Media query for mobile view */
+@media (max-width: 582px) {
+    .login-container {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        height: 98%;
+        padding: 10px;
+    }
+
+    .login-leftbar {
+        display: none;
+        /* Hide the left bar on mobile */
+    }
+
+    .login-rightbar {
+        width: 100%;
+        flex: none;
+        /* padding: 20px; */
+        height: 100%;
+    }
+
+    .login-inner {
+        width: 70%;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(45, 41, 145, 0.6);
+        /* Remove box shadow on mobile */
+    }
+
+    .user-details>input {
+        width: 100%;
+        margin: 5px 0;
+        padding: 10px;
+    }
+
+    .login-head {
+        font-size: 24px;
+    }
+
+    .user-details>button {
+        width: 100%;
+        margin-top: 10px;
+    }
 }
